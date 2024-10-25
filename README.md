@@ -34,3 +34,4 @@ tigr81 FastAPI project template
 
 7. **Monitor the Release Process**
     After the PR is merged, close the PR and monitor the `Release on PR Merge` workflow to ensure the release is processed correctly.
+
