@@ -1,0 +1,106 @@
+name: Release on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  prepare_release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.bump_version.outputs.new_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 0  # Fetch all history, including tags
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Get latest tag
+        id: get_last_tag
+        run: |
+          # Get the latest tag, default to 0.0.0 if none exists
+          last_tag=$(git tag --sort=-v:refname | head -n 1 || echo "0.0.0")
+          echo "Latest tag: $last_tag"
+          echo "last_tag=$last_tag" >> $GITHUB_ENV
+
+      - name: Parse PR title for release type
+        id: parse_release_type
+        run: |
+          # Extract "release(major|minor|patch)" from PR title
+          release_type=$(echo "$GITHUB_EVENT_PULL_REQUEST_TITLE" | grep -oP '(?<=release\()(major|minor|patch)(?=\))')  
+          echo "Parsed release_type: $release_type"
+          # Check if release_type is empty and provide detailed feedback
+          if [ -z "$release_type" ]; then
+              echo "PR title: '$GITHUB_EVENT_PULL_REQUEST_TITLE'"
+              echo "Error: PR title must include 'release(major|minor|patch)'."
+              echo "Example of a valid PR title: 'release(minor): Add new feature'"
+              exit 1
+          else
+              echo "release_type=$release_type" >> $GITHUB_ENV
+          fi
+        env:
+            GITHUB_EVENT_PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Check if release type was provided
+        if: env.release_type == ''
+        run: |
+          echo "Error: PR title must include 'release(major|minor|patch)'."
+          exit 1
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          version="${{ env.last_tag }}"
+
+          # Parse the version (e.g., 1.2.3) into major, minor, patch
+          IFS='.' read -r major minor patch <<< "$version"
+
+          # Increment version based on release type
+          case "${{ env.release_type }}" in
+            major)
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            minor)
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            patch)
+              patch=$((patch + 1))
+              ;;
+          esac
+
+          # Format new version and export it
+          new_version="$major.$minor.$patch"
+          echo "Last version: $version"
+          echo "New version: $new_version"
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT 
+
+  create_tag:
+    needs: prepare_release  # Ensure this job runs after the preparation job
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Grant permission to create tags
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create new tag
+        env:
+            NEW_VERSION: ${{ needs.prepare_release.outputs.new_version }}
+        run: |
+          echo "Creating Git tag: ${NEW_VERSION}"
+          git tag $NEW_VERSION
+          git push origin $NEW_VERSION
