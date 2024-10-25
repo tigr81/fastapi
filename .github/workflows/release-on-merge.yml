@@ -28,7 +28,10 @@ jobs:
         id: get_last_tag
         run: |
           # Get the latest tag, default to 0.0.0 if none exists
-          last_tag=$(git tag --sort=-v:refname | head -n 1 || echo "0.0.0")
+          last_tag=$(git tag --sort=-v:refname | head -n 1)
+          if [ -z "$last_tag" ]; then
+              last_tag="0.0.0"
+          fi
           echo "Latest tag: $last_tag"
           echo "last_tag=$last_tag" >> $GITHUB_ENV
 
