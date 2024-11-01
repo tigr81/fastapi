@@ -5,5 +5,5 @@
   "description": "FAST API web app",
   "author_name": "name surname",
   "author_email": "email@gmail.com",
-  "dependencies": "{{cookiecutter.dependencies}}"
+  "dependencies": {}
 }

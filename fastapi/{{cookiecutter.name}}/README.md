@@ -23,7 +23,7 @@ source .venv/bin/activate
 Run running the package as a python module
 
 ```bash
-python -m webserver
+python -m {{cookiecutter.package_name}}
 ```
 
 ## Start up with Docker

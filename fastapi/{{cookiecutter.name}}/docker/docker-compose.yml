@@ -2,7 +2,7 @@ version: "3"
 
 services:
 
-  webserver:
+  {{cookiecutter.package_name}}:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
 
