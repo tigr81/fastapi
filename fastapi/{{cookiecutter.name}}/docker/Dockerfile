@@ -16,8 +16,8 @@ ENV PIP_ROOT_USER_ACTION=ignore
 
 COPY --from=requirements-stage /tmp/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-COPY ./webserver /app/webserver
+COPY ./{{cookiecutter.package_name}} /app/{{cookiecutter.package_name}}
 
 WORKDIR /app
-# CMD ["uvicorn", "webserver.app:app", "--host", "0.0.0.0", "--port", "8080"]
-CMD ["python", "-m", "webserver"]
+# CMD ["uvicorn", "{{cookiecutter.package_name}}.app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python", "-m", "{{cookiecutter.package_name}}"]

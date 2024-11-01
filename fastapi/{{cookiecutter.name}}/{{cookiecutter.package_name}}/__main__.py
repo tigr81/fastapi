@@ -5,7 +5,7 @@ from {{cookiecutter.package_name}}.config.model import API_CONFIG
 
 if __name__ == "__main__":
     uvicorn.run(
-        "webserver.app:app",
+        "{{cookiecutter.package_name}}.app:app",
         host=API_CONFIG.host,
         port=API_CONFIG.port,
         reload=API_CONFIG.reload,
