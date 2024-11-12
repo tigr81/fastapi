@@ -2,8 +2,8 @@ import os
 
 import yaml
 
-from {{cookiecutter.package_name}}.app_settings import APP_SETTINGS, EnvironmentType
 from {{cookiecutter.package_name}} import CONFIG_LOCATION
+from {{cookiecutter.package_name}}.app_settings import APP_SETTINGS, EnvironmentType
 
 
 def _merge_dictionaries(main_dict, new_dict, merging_lists=False):

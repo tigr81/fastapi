@@ -2,8 +2,8 @@ import os
 
 import yaml
 
-from webserver.app_settings import APP_SETTINGS, EnvironmentType
 from webserver import CONFIG_LOCATION
+from webserver.app_settings import APP_SETTINGS, EnvironmentType
 
 
 def _merge_dictionaries(main_dict, new_dict, merging_lists=False):

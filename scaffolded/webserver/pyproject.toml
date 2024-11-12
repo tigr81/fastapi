@@ -24,6 +24,7 @@ pytest = "^7.4.2"
 mypy = "^1.5.1"
 autoflake = "^2.2.1"
 ruff = "^0.4.1"
+poethepoet = "^0.29.0"
 
 
 [build-system]
