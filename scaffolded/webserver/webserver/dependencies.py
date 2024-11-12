@@ -11,8 +11,7 @@ api_key_header = APIKeyHeader(name="X-API-Key")
 
 
 async def get_apikey_header(apikey: str = Security(api_key_header)):
-    """
-        This function checks whether a request has the correct apikey.
+    """This function checks whether a request has the correct apikey.
 
     Args:
         apikey (str, optional): apikey taken from the header of the http request. Defaults to Header(...).

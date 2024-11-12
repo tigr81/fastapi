@@ -1,13 +1,13 @@
 import os
 
 import yaml
-from webserver.app_settings import APP_SETTINGS, EnvironmentType
+
 from webserver import CONFIG_LOCATION
+from webserver.app_settings import APP_SETTINGS, EnvironmentType
 
 
 def _merge_dictionaries(main_dict, new_dict, merging_lists=False):
-    """Merge two dictionaries prioritizing the second one"""
-
+    """Merge two dictionaries prioritizing the second one."""
     # Copy the dict
     main_dict = main_dict.copy()
 
@@ -47,7 +47,6 @@ def _merge_dictionaries(main_dict, new_dict, merging_lists=False):
 
 def _get_config_dict(env: EnvironmentType):
     """Get the config dictionary from resource file"""
-
     with open(os.path.join(CONFIG_LOCATION, "{}.yml".format(env))) as f:
         configmap = yaml.load(f, Loader=yaml.SafeLoader)
     return configmap if configmap else {}
@@ -56,4 +55,3 @@ def _get_config_dict(env: EnvironmentType):
 config = _merge_dictionaries(
     _get_config_dict("default"), _get_config_dict(APP_SETTINGS.environment)
 )
-print(config)
