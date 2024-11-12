@@ -1,13 +1,13 @@
 import os
 
 import yaml
+
 from {{cookiecutter.package_name}}.app_settings import APP_SETTINGS, EnvironmentType
 from {{cookiecutter.package_name}} import CONFIG_LOCATION
 
 
 def _merge_dictionaries(main_dict, new_dict, merging_lists=False):
-    """Merge two dictionaries prioritizing the second one"""
-
+    """Merge two dictionaries prioritizing the second one."""
     # Copy the dict
     main_dict = main_dict.copy()
 
@@ -47,7 +47,6 @@ def _merge_dictionaries(main_dict, new_dict, merging_lists=False):
 
 def _get_config_dict(env: EnvironmentType):
     """Get the config dictionary from resource file"""
-
     with open(os.path.join(CONFIG_LOCATION, "{}.yml".format(env))) as f:
         configmap = yaml.load(f, Loader=yaml.SafeLoader)
     return configmap if configmap else {}

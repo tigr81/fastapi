@@ -1,10 +1,10 @@
 import logging
 
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from webserver import dependencies
 from webserver.routers import health
-from fastapi.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
 
