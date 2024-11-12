@@ -56,4 +56,3 @@ def _get_config_dict(env: EnvironmentType):
 config = _merge_dictionaries(
     _get_config_dict("default"), _get_config_dict(APP_SETTINGS.environment)
 )
-print(config)
